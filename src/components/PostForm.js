@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { nanoid } from "nanoid";
 import { useHistory } from "react-router";
 import Gratitude from "./../assets/grForm.png";
 import { useDispatch } from "react-redux";
 import { notEkleAPI } from "../actions";
-//import { baslangicNotlariniGetir } from "../reducers";
+import { baslangicNotlariniGetir } from "../reducers";
+import { ToastContainer, toast } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
 
 export default function PostForm() {
   const {
@@ -16,6 +19,11 @@ export default function PostForm() {
 
   const history = useHistory();
   const dispatch = useDispatch();
+  const bildirim = () => toast("Ekleniyor... 🙌🏻");
+
+  useEffect(() => {
+    baslangicNotlariniGetir();
+  }, []);
 
   function onSubmit(data) {
     const yeniNot = {
@@ -29,6 +37,7 @@ export default function PostForm() {
     // burada ilgili eylemi dispatch edin
     dispatch(notEkleAPI(yeniNot));
     // toast mesajı gösterin
+    bildirim();
     // sonra aşağıdaki satırı aktifleştirin
     setTimeout(() => history.push("/notlar"), 2000);
   }
@@ -84,6 +93,18 @@ export default function PostForm() {
           Ekle
         </button>
       </form>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }
